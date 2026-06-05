@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f5f1e8;--surf:#fffaf0;--surf2:#f0ebe0;--bord:#d8cfbd;--text:#20201d;--muted:#6e6a60;--accent:#1d6b5f;--acc2:#2a8a7a;--ok:#1c6b3e;--r:12px;--rs:8px}
+:root{--bg:#f5f1e8;--surf:#fffaf0;--surf2:#f0ebe0;--bord:#d8cfbd;--text:#20201d;--muted:#6e6a60;--accent:#1d6b5f;--acc2:#2a8a7a;--r:12px;--rs:8px}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:linear-gradient(90deg,rgba(32,32,29,.04) 1px,transparent 1px),linear-gradient(rgba(32,32,29,.035) 1px,transparent 1px),var(--bg);background-size:28px 28px;color:var(--text);line-height:1.78;font-size:15px}
 #app{max-width:1040px;margin:0 auto;padding:2rem 1.25rem 5rem}
@@ -20,7 +20,7 @@ h1{font-family:'JetBrains Mono',monospace;font-size:1.55rem;font-weight:700;marg
 .round-btn{border:1px solid var(--bord);background:var(--surf);border-radius:var(--r);padding:1rem;text-align:left;color:var(--text);font-family:inherit;font-weight:800;cursor:pointer}
 .round-btn span{display:block;font-size:.74rem;color:var(--muted);font-weight:700;margin-top:.15rem}
 .round-btn.active{background:var(--accent);border-color:var(--accent);color:#fffaf0}
-.round-btn.active span{color:#fffaf0;opacity:.8}
+.round-btn.active span{color:#fffaf0;opacity:.82}
 .tools{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
 .filter{border:1px solid var(--bord);background:var(--surf);border-radius:99px;padding:.45rem .75rem;color:var(--muted);font-family:inherit;font-size:.78rem;font-weight:800;cursor:pointer}
 .filter.active{background:var(--accent);border-color:var(--accent);color:#fffaf0}
@@ -58,7 +58,7 @@ h1{font-family:'JetBrains Mono',monospace;font-size:1.55rem;font-weight:700;marg
   <header class="hdr">
     <div class="badge">PRIVATE ANSWER KEY</div>
     <h1>알고리즘 기말고사 정답지</h1>
-    <p>1~3회차 문제의 정답과 상세 풀이를 회차별로 확인하는 관리용 페이지입니다.</p>
+    <p>학생 풀이 화면과 분리된 관리용 정답 페이지입니다. 현재 1~6회차 데이터를 자동으로 불러옵니다.</p>
     <a class="home" href="../algorithm-final.html">학생 풀이 페이지로 이동</a>
   </header>
   <nav class="round-nav" id="round-nav"></nav>
@@ -73,7 +73,9 @@ let activeFilter = '전체';
 let parseProblems;
 let renderMarkdown;
 
-function escapeHtml(value){return String(value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function escapeHtml(value){
+  return String(value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 
 async function loadData(){
   const html = await fetch('../algorithm-final.html').then(function(res){
@@ -86,11 +88,27 @@ async function loadData(){
   });
   const inline = (html.match(/<script>([\s\S]*?)<\/script>/)||[])[1];
   if(!inline) throw new Error('학생 페이지에서 문제 스크립트를 찾지 못했습니다.');
-  const fakeElement = function(){return {style:{},classList:{toggle(){},add(){},remove(){}},textContent:'',innerHTML:'',value:'',disabled:false,addEventListener(){},remove(){},closest(){return {remove(){}}}}};
+
+  const fakeElement = function(){
+    return {
+      style:{},
+      classList:{toggle(){},add(){},remove(){}},
+      textContent:'',
+      innerHTML:'',
+      value:'',
+      disabled:false,
+      addEventListener(){},
+      remove(){},
+      closest(){return {remove(){}}}
+    };
+  };
   const fakeDocument = {getElementById:fakeElement,createElement:fakeElement,body:{appendChild(){}}};
   const fakeWindow = {addEventListener(){},scrollTo(){},ALGORITHM_FINAL_ROUNDS:[]};
   const fakeStorage = {getItem(){return null},setItem(){}};
-  const runner = new Function('window','document','localStorage','history','location', inline + '\n' + extra + '\nreturn {rounds: window.ALGORITHM_FINAL_ROUNDS, parseProblems, renderMarkdown};');
+  const runner = new Function(
+    'window','document','localStorage','history','location',
+    inline + '\n' + extra + '\nreturn {rounds: window.ALGORITHM_FINAL_ROUNDS, parseProblems, renderMarkdown};'
+  );
   return runner(fakeWindow,fakeDocument,fakeStorage,{replaceState(){}},{hash:'',pathname:'../algorithm-final.html'});
 }
 
@@ -114,13 +132,21 @@ function renderFilters(problems){
 function renderRound(){
   const round = ROUNDS[activeRound];
   const problems = parseProblems(round.md);
-  const filtered = activeFilter==='전체' ? problems : problems.filter(function(p){return p.category===activeFilter});
+  const filtered = activeFilter === '전체' ? problems : problems.filter(function(p){return p.category === activeFilter});
   renderNav();
   renderFilters(problems);
   document.getElementById('content').className = '';
-  document.getElementById('content').innerHTML = '<section class="card"><div class="round-title"><div><h2>'+escapeHtml(round.title)+'</h2><p>'+filtered.length+' / '+problems.length+'문항 표시</p></div></div>'+filtered.map(function(p){
-    return '<article class="answer-item"><div class="q-head"><span class="q-num">Q'+p.num+'</span><span class="q-cat">'+escapeHtml(p.category)+'</span><span class="q-score">'+p.score+'점</span></div><div class="q-title">'+escapeHtml(p.title)+'</div><div class="section-label">문제</div><div class="md">'+renderMarkdown(p.question)+'</div><div class="answer-box"><div class="section-label">정답 및 상세 풀이</div><div class="md">'+renderMarkdown(p.answer || '등록된 정답이 없습니다.')+'</div></div></article>';
-  }).join('')+'</section>';
+  document.getElementById('content').innerHTML =
+    '<section class="card"><div class="round-title"><div><h2>'+escapeHtml(round.title)+'</h2><p>'+filtered.length+' / '+problems.length+'문항 표시</p></div></div>'+
+    filtered.map(function(p){
+      return '<article class="answer-item">'+
+        '<div class="q-head"><span class="q-num">Q'+p.num+'</span><span class="q-cat">'+escapeHtml(p.category)+'</span><span class="q-score">'+p.score+'점</span></div>'+
+        '<div class="q-title">'+escapeHtml(p.title)+'</div>'+
+        '<div class="section-label">문제</div><div class="md">'+renderMarkdown(p.question)+'</div>'+
+        '<div class="answer-box"><div class="section-label">정답 및 상세 풀이</div><div class="md">'+renderMarkdown(p.answer || '등록된 정답이 없습니다.')+'</div></div>'+
+      '</article>';
+    }).join('')+
+    '</section>';
 }
 
 function selectRound(index){
@@ -142,7 +168,7 @@ loadData().then(function(data){
   renderRound();
 }).catch(function(error){
   document.getElementById('content').className = 'error';
-  document.getElementById('content').innerHTML = '정답 데이터를 불러오지 못했습니다.<br>정적 서버에서 /seojang/ 경로로 열어 주세요.<br><br>'+escapeHtml(error.message);
+  document.getElementById('content').innerHTML = '정답 데이터를 불러오지 못했습니다.<br>정적 서버에서 <code>/seojang/</code> 경로로 열어 주세요.<br><br>'+escapeHtml(error.message);
 });
 </script>
 </body>
