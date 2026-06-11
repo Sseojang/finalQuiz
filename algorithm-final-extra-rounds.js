@@ -2802,7 +2802,7 @@ NP 이론에 대한 설명으로 옳지 않은 것은?
 window.ALGORITHM_FINAL_ROUNDS.push({
   id: 8,
   label: '8회차',
-  title: '제8회 알고리즘 기말고사 서술형 실전 문제 (Greedy·Backtracking·Knapsack)',
+  title: '제8회 알고리즘 기말고사 서술형 실전 문제 (Greedy·Backtracking·Knapsack·TSP·Branch-and-Bound·Complexity·NP)',
   md: String.raw`# 알고리즘 기말고사 서술형 실전 문제 8회차
 
 ---
@@ -3071,18 +3071,7 @@ n=4, W=16, p=[40,30,50,10], w=[2,5,10,5] (이미 p/w 비내림차순 정렬). �
 
 ---
 
-*끝*`
-});
-
-window.ALGORITHM_FINAL_ROUNDS.push({
-  id: 9,
-  label: '9회차',
-  title: '제9회 알고리즘 기말고사 서술형 실전 문제 (Branch-and-Bound·TSP·Complexity·NP)',
-  md: String.raw`# 알고리즘 기말고사 서술형 실전 문제 9회차
-
----
-
-## 문제 1. [10점] TSP — 동적계획 D 계산과 최적 투어
+## 문제 10. [10점] TSP — 동적계획 D 계산과 최적 투어
 
 다음 가중 방향그래프의 인접행렬 W가 주어졌다(∞는 간선 없음). 시작 정점은 v1이다.
 
@@ -3131,7 +3120,7 @@ D[v1][{v2,v3,v4}] = min(
 
 ---
 
-## 문제 2. [5점] TSP — P 테이블 복원과 부분집합 비트 인코딩
+## 문제 11. [5점] TSP — P 테이블 복원과 부분집합 비트 인코딩
 
 문제 1의 동적계획에서 부분집합 A ⊆ {v2,v3,v4}를 비트로 인코딩한다(v2=bit0, v3=bit1, v4=bit2).
 
@@ -3161,7 +3150,7 @@ D[v1][{v2,v3,v4}] = min(
 
 ---
 
-## 문제 3. [5점] TSP — 투어 수와 시간복잡도
+## 문제 12. [5점] TSP — 투어 수와 시간복잡도
 
 **(a)** n개 도시에서 시작 정점을 고정했을 때 가능한 투어(Hamiltonian 회로)의 총 개수를 구하시오.
 **(b)** brute-force와 동적계획의 시간복잡도를 각각 쓰시오.
@@ -3183,7 +3172,7 @@ D[v1][{v2,v3,v4}] = min(
 
 ---
 
-## 문제 4. [10점] Branch-and-Bound — 0-1 Knapsack Best-First Search
+## 문제 13. [10점] Branch-and-Bound — 0-1 Knapsack Best-First Search
 
 n=4, W=16, p=[40,30,50,10], w=[2,5,10,5] (p/w 비내림차순 정렬, bound = profit + (남은 용량을 분수 허용 그리디로 채운 값)).
 
@@ -3215,7 +3204,7 @@ n=4, W=16, p=[40,30,50,10], w=[2,5,10,5] (p/w 비내림차순 정렬, bound = pr
 
 ---
 
-## 문제 5. [5점] Computational Complexity — 최댓값 찾기 하한
+## 문제 14. [5점] Computational Complexity — 최댓값 찾기 하한
 
 **(a)** n개의 키 중 가장 큰 키를 비교만으로 찾을 때 필요한 최소 비교 횟수(하한)를 쓰시오.
 **(b)** 이 하한을 토너먼트(승자/패자) 관점에서 논증하시오.
@@ -3233,7 +3222,7 @@ n=4, W=16, p=[40,30,50,10], w=[2,5,10,5] (p/w 비내림차순 정렬, bound = pr
 
 ---
 
-## 문제 6. [10점] Computational Complexity — 최소·최대 동시 탐색과 Adversary
+## 문제 15. [10점] Computational Complexity — 최소·최대 동시 탐색과 Adversary
 
 서로 다른 n개의 키에서 가장 작은 키와 가장 큰 키를 동시에 찾는다. (n은 짝수)
 
@@ -3263,7 +3252,7 @@ n=4, W=16, p=[40,30,50,10], w=[2,5,10,5] (p/w 비내림차순 정렬, bound = pr
 
 ---
 
-## 문제 7. [5점] Computational Complexity — 입력 크기와 다항시간
+## 문제 16. [5점] Computational Complexity — 입력 크기와 다항시간
 
 정수 n의 소수 판별 알고리즘은 i=2부터 √n까지 나누어 보므로 Θ(√n)이다.
 
@@ -3283,7 +3272,7 @@ n=4, W=16, p=[40,30,50,10], w=[2,5,10,5] (p/w 비내림차순 정렬, bound = pr
 
 ---
 
-## 문제 8. [5점] NP — 판정문제와 P, NP
+## 문제 17. [5점] NP — 판정문제와 P, NP
 
 **(a)** TSP와 0-1 Knapsack의 최적화 문제를 각각 대응되는 판정(decision) 문제로 바꾸어 쓰시오.
 **(b)** 집합 P와 NP의 정의를 쓰시오.
@@ -3306,7 +3295,7 @@ n=4, W=16, p=[40,30,50,10], w=[2,5,10,5] (p/w 비내림차순 정렬, bound = pr
 
 ---
 
-## 문제 9. [5점] NP — 검증, NP-complete, 다항 환원
+## 문제 18. [5점] NP — 검증, NP-complete, 다항 환원
 
 **(a)** 판정 문제의 "인증서(certificate)"와 다항시간 검증기 verify의 역할을 설명하시오.
 **(b)** NP-hard와 NP-complete의 정의를 쓰시오.
