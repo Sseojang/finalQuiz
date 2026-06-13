@@ -4467,18 +4467,19 @@ P 테이블에서 P[v1][{v2,v3,v4}]=v3, P[v3][{v2,v4}]=v2, P[v2][{v4}]=v4를 얻
 
 ## 문제 11. [5점] NP-Theory — Reduction
 
-Clique 결정 문제(그래프에 크기 k 이상의 완전 부분그래프가 있는가?)가 NP-complete임을 증명하는 전략이다. 빈 칸을 채우시오.
+Maximum Clique(그래프에서 가장 큰 완전 부분그래프를 찾는) 최적화 문제가 다루기 어렵다는 것을 증명하는 전략이다. 빈 칸을 채우시오.
 
-1. Clique ∈ NP임을 보인다(주어진 정점 집합이 클리크인지 다항시간에 검증).
-2. 이미 ①[2점] 집합에 속함이 알려진 3-SAT을 Clique로 다항시간 환원(3-SAT ∝ Clique)할 수 있음을 보인다.
-3. 따라서 Clique 결정 문제는 ②[3점] 집합에 속한다.
+1. 이 최적화 문제를 "크기 k 이상의 클리크가 존재하는가?"를 묻는 결정 문제 Clique-Decision으로 둔다.
+2. Clique-Decision ∈ NP임을 보인다(주어진 정점 집합이 클리크인지 다항시간에 검증).
+3. 이미 ①[2점] 집합에 속함이 알려진 3-SAT을 Clique-Decision으로 다항시간 환원(3-SAT ∝ Clique-Decision)한다.
+4. Clique-Decision은 NP이면서 NP-hard이므로 NP-complete이다. 따라서 원래의 Maximum Clique 최적화 문제는 ②[3점] 집합에 속한다.
 
 ### 정답
 
-**①** **NP-complete** (3-SAT은 Cook의 정리로 NP-complete임이 증명됨)
-**②** **NP-complete** (Clique은 NP에 속하면서 NP-hard이므로)
+**①** **NP-complete** (3-SAT은 Cook의 정리로 증명된 최초의 NP-complete 문제)
+**②** **NP-hard** (최적화 문제는 "예/아니오"를 묻는 판정 문제가 아니므로 NP-complete로 분류하지 않고, NP-complete 문제만큼 어려운 NP-hard로 분류한다)
 
-풀이: "C ∝ B"는 B가 적어도 C만큼 어렵다는 뜻이다. 이미 NP-complete인 문제를 새 문제로 환원하고 새 문제가 NP에도 속하면 그 문제도 NP-complete다.
+풀이: "C ∝ B"는 B가 적어도 C만큼 어렵다는 뜻이다. ①처럼 이미 NP-complete인 3-SAT을 결정 문제로 환원하면 그 결정 문제(Clique-Decision)도 NP-complete가 되고, 그에 대응하는 ②의 최적화 문제(Maximum Clique)는 NP-hard다. 두 빈 칸의 답이 다르다는 점(NP-complete vs NP-hard)에 유의하라.
 
 ---
 
